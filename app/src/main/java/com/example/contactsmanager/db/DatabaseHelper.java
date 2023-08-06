@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import com.example.contactsmanager.db.entity.Contact;
 
@@ -14,7 +15,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION =  1;
     private static final String DATABASE_NAME = "Contact.db";
-
     public DatabaseHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -61,7 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Contact contact = new Contact(
         cursor.getString(cursor.getColumnIndexOrThrow(Contact.COLUMN_NAME)),
         cursor.getString(cursor.getColumnIndexOrThrow(Contact.COLUMN_EMAIL)),
-        cursor.getInt(cursor.getColumnIndexOrThrow(Contact.COLUMN_ID))
+        cursor.getLong(cursor.getColumnIndexOrThrow(Contact.COLUMN_ID))
         );
         cursor.close();
         return contact;
@@ -80,7 +80,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Contact contact = new Contact();
                 contact.setId(cursor.getInt(cursor.getColumnIndexOrThrow(Contact.COLUMN_ID)));
                 contact.setName(cursor.getString(cursor.getColumnIndexOrThrow(Contact.COLUMN_NAME)));
-                contact.setName(cursor.getString(cursor.getColumnIndexOrThrow(Contact.COLUMN_EMAIL)));
+                contact.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(Contact.COLUMN_EMAIL)));
 
                 Contacts.add(contact);
             }while (cursor.moveToNext());

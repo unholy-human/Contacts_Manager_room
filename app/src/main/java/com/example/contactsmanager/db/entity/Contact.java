@@ -8,12 +8,12 @@ public class Contact {
 
     private String name;
     private String email;
-    private int id;
+    private long id;
 
     public Contact(){
 
     }
-    public Contact(String name, String email, int id){
+    public Contact(String name, String email, long id){
         this.name = name;
         this.email = email;
         this.id = id;
@@ -35,7 +35,7 @@ public class Contact {
         this.email = email;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -43,5 +43,5 @@ public class Contact {
         this.id = id;
     }
 
-    public static final String CREATE_TABLE = "CREATE TABLE" +  TABLE_NAME + "(" + COLUMN_ID + "INTEGER PRIMARY KEY AUTOINCREMENT," +  COLUMN_NAME + " TEXT," + COLUMN_EMAIL + "DAYTIME DEFAULT CURRENT_TIMESTAMP," + ")";
+    public static final String CREATE_TABLE = "CREATE TABLE " +  TABLE_NAME + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +  COLUMN_NAME + " TEXT, " + COLUMN_EMAIL + " DAYTIME DEFAULT CURRENT_TIMESTAMP" + ")";
 }
