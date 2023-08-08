@@ -10,12 +10,13 @@ import androidx.room.Update;
 import com.example.contactsmanager.db.entity.Contact;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Dao
 public interface contactDAO {
 
     @Insert
-    public long addContact(Contact contact);
+    public long insertContact(Contact contact);
 
     @Update
     public void updateContact(Contact contact);
@@ -25,7 +26,7 @@ public interface contactDAO {
 
 
     @Query("SELECT * FROM contacts")
-    public ArrayList<Contact> getAllContacts();
+    public List<Contact> getAllContacts();
 
     @Query("SELECT * FROM contacts WHERE contact_id =:contactID")
     public Contact getContact(long contactID);
