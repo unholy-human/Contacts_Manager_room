@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.contactsmanager.adapter.ContactsAdapter;
-import com.example.contactsmanager.db.DatabaseHelper;
 import com.example.contactsmanager.db.entity.Contact;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
