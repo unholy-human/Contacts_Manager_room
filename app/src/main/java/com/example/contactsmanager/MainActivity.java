@@ -9,12 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -61,8 +63,36 @@ public class MainActivity extends AppCompatActivity {
         // RecyclerVIew
         recyclerView = findViewById(R.id.recycler_view_contacts);
 
+
+        RoomDatabase.Callback callback = new RoomDatabase.Callback() {
+            @Override
+            public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                super.onCreate(db);
+
+                // whenever the database is created these 4 contacts will automatically be added on install
+
+//                CreateContact("bill gates", "bill@microsoft.com");
+//                CreateContact("sill gates", "sill@microsoft.com");
+//                CreateContact("dill gates", "dill@microsoft.com");
+//                CreateContact("hill gates", "hill@microsoft.com");
+
+                Log.i("TAG", "onCreate: database is created");
+
+            }
+
+            @Override
+            public void onOpen(@NonNull SupportSQLiteDatabase db) {
+                super.onOpen(db);
+                // whenever the database is opened
+
+                Log.i("TAG", "onOpen: database is opened");
+
+
+            }
+        };
+
         //Database
-        contactsAppDatabase = Room.databaseBuilder(this, ContactsAppDatabase.class, "contactDB").allowMainThreadQueries().build();
+        contactsAppDatabase = Room.databaseBuilder(this, ContactsAppDatabase.class, "contactDB").addCallback(callback).allowMainThreadQueries().build();
 
         // Contacts List call all contacts using main thread 🔽
 //        contactArrayList.addAll(contactsAppDatabase.getContactDAO().getAllContacts());
@@ -190,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void DisplayAllContactsInBackGroundThread(){
         ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Handler handler = new Handler(Looper.getMainLooper());
+        Handler handler = new Handler(Looper.myLooper());
         executorService.execute(new Runnable() {
             @Override
             public void run() {
