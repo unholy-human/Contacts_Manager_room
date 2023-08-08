@@ -12,6 +12,8 @@ import androidx.room.RoomDatabase;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +29,8 @@ import com.example.contactsmanager.db.entity.Contact;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,8 +64,9 @@ public class MainActivity extends AppCompatActivity {
         //Database
         contactsAppDatabase = Room.databaseBuilder(this, ContactsAppDatabase.class, "contactDB").allowMainThreadQueries().build();
 
-        // Contacts List
-        contactArrayList.addAll(contactsAppDatabase.getContactDAO().getAllContacts());
+        // Contacts List call all contacts using main thread 🔽
+//        contactArrayList.addAll(contactsAppDatabase.getContactDAO().getAllContacts());
+        DisplayAllContactsInBackGroundThread();
 //
         contactsAdapter = new ContactsAdapter(this, contactArrayList,MainActivity.this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
@@ -182,6 +187,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    private void DisplayAllContactsInBackGroundThread(){
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                contactArrayList.addAll(contactsAppDatabase.getContactDAO().getAllContacts());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            contactsAdapter.notifyDataSetChanged();
+                        }
+                    });
+            }
+        });
+
+    }
 
     // Menu bar
     @Override
